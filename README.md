@@ -13,7 +13,12 @@ A lightweight, multi-client local chat application written in plain Java with no
 
 ## Download
 
-No Java installation needed. Download `FRNChat-Windows-v1.0.zip` from [Releases](https://github.com/FajarRahmadani/FRN-Chat/releases/latest), extract it, and run `FRN Chat.exe`. If Windows SmartScreen shows a warning, click **More info → Run anyway**.
+No Java installation needed. Download from [Releases](https://github.com/FajarRahmadani/FRN-Chat/releases/latest), extract, and run:
+
+- `FRNChat-Server-Windows-v1.0.zip`: run `FRN Chat Server.exe` on one computer (keep the window open).
+- `FRNChat-Windows-v1.0.zip`: run `FRN Chat.exe` on every computer that wants to chat.
+
+If Windows SmartScreen shows a warning, click **More info → Run anyway**.
 
 ## Running from Source
 
