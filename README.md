@@ -1,8 +1,6 @@
 # FRN Chat
 
-A lightweight, multi-client local chat application written in plain Java with no external libraries. Messages, photos, and videos are sent over TCP sockets and encrypted on the client side with AES-256-GCM.
-
-This desktop client can chat in the same room as the Android app.
+A lightweight, multi-client local chat application written in plain Java with no external libraries. Run the server and clients on desktop, and optionally join from Android phones. Messages, photos, and videos are sent over TCP sockets and encrypted on the client side with AES-256-GCM.
 
 ## Features
 
@@ -15,22 +13,7 @@ This desktop client can chat in the same room as the Android app.
 
 ## Download
 
-No Java installation needed. Download the Windows installer from [Releases](https://github.com/FajarRahmadani/FRN-Chat/releases/latest).
-
-## Other Clients
-
-| Repository | Platform |
-|------------|----------|
-| [FRNChatKotlin](https://github.com/FajarRahmadani/FRNChatKotlin) | Android (Kotlin) |
-| [FRNChatServer](https://github.com/FajarRahmadani/FRNChatServer) | Server on an Android phone |
-
-All clients use port 2106 and the same passphrase, so phones and desktops can chat in the same room.
-
-```text
-Phone (Android) ─┐
-                 ├──► Server (laptop or phone) ◄── Desktop (Java Swing)
-Phone (Android) ─┘          port 2106
-```
+No Java installation needed. Download `FRNChat-Windows-v1.0.zip` from [Releases](https://github.com/FajarRahmadani/FRN-Chat/releases/latest), extract it, and run `FRN Chat.exe`. If Windows SmartScreen shows a warning, click **More info → Run anyway**.
 
 ## Running from Source
 
@@ -42,13 +25,13 @@ cd FRN-Chat
 javac -d out src/ChatServer.java src/ChatClient.java
 ```
 
-**1. Start the server** (on one device only)
+**1. Start the server** (on one computer only)
 
 ```bash
 java -cp out ChatServer
 ```
 
-The server listens on port **2106**. The server can also run on a phone using the FRNChatServer app.
+The server listens on port **2106**. Run it on one computer; other computers (and phones, optionally) connect to that computer's IP address. To find the IP address on Windows, run `ipconfig` and look for **IPv4 Address**.
 
 **2. Start a client**
 
@@ -56,11 +39,11 @@ The server listens on port **2106**. The server can also run on a phone using th
 java -cp out ChatClient
 ```
 
-Enter the **server IP** and a **username**, then click **Connect**. All devices must be on the same network.
+Enter the **server IP** and a **username**, then click **Connect (Hubungkan)**. All devices must be on the same network. When the server runs on the same computer, use `localhost`.
 
 ### Passphrase
 
-Every client must use the **exact same** passphrase, including capitalization and spaces. Otherwise messages cannot be decrypted. The client reads the passphrase from the `FRN_CHAT_SECRET` environment variable or from a `.env` file (see `.env.example`), or asks for it at startup.
+Every client must use the **exact same** passphrase, including capitalization and spaces. Otherwise messages cannot be decrypted. The client reads the passphrase from the `FRN_CHAT_SECRET` environment variable or from a `.env` file (see `.env.example`).
 
 The default passphrase of the Android app is:
 
@@ -70,15 +53,34 @@ fajar ganteng baik hati dan tidak sombong
 
 To change it, edit `EMBEDDED_SECRET` in the Android app source and rebuild, then use the same passphrase in the desktop client.
 
-## Building a Windows Installer (.exe)
+## Building the Windows App
 
-Requires JDK 17 or newer and [WiX Toolset 3.x](https://wixtoolset.org/).
+Requires JDK 17 or newer. No other tools are needed.
 
 ```bash
 javac -d out src/ChatServer.java src/ChatClient.java
 mkdir dist
 jar --create --file dist/frnchat.jar --main-class ChatClient -C out .
-jpackage --type exe --name "FRN Chat" --input dist --main-jar frnchat.jar --main-class ChatClient --app-version 1.0 --win-shortcut --win-menu
+jpackage --type app-image --name "FRN Chat" --input dist --main-jar frnchat.jar --main-class ChatClient --app-version 1.0 --dest release
+```
+
+The app is created in `release/FRN Chat/`. Zip that folder to distribute it.
+
+## Optional: Android
+
+Phones can join the same chat room with the Android app. This is optional; the desktop server and client work on their own.
+
+| Repository | Description |
+|------------|-------------|
+| [FRNChatKotlin](https://github.com/FajarRahmadani/FRNChatKotlin) | Android chat client (Kotlin) |
+| [FRNChatServer](https://github.com/FajarRahmadani/FRNChatServer) | Optional: run the server on an Android phone instead of a computer |
+
+All clients use port 2106 and the same passphrase.
+
+```text
+Desktop client ─┐
+                ├──► Server (desktop by default) ◄── Android client (optional)
+Desktop client ─┘            port 2106
 ```
 
 ## Security
